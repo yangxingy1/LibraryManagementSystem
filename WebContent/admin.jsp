@@ -142,7 +142,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="admin/add_student.jsp" target="showBook" class="nav-link">
-                        <i class="bi bi-person-plus"></i> 添加学生
+                        <i class="bi bi-person"></i> 添加学生
                     </a>
                 </li>
                 <li class="nav-item">

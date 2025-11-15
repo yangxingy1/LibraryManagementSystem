@@ -198,16 +198,6 @@
 				</div>
 			</div>
 		</c:when>
-		<c:otherwise>
-			<div class="empty-state">
-				<i class="bi bi-exclamation-circle"></i>
-				<h4>无法获取学生信息</h4>
-				<p>没有找到对应的学生数据。</p>
-				<a href="javascript:history.back()" class="btn btn-primary mt-2">
-					<i class="bi bi-arrow-left"></i> 返回
-				</a>
-			</div>
-		</c:otherwise>
 	</c:choose>
 </div>
 

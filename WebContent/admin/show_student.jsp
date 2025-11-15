@@ -2,14 +2,13 @@
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="com.demo.dao.StudentDAO"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%-- 【重要】 确保JSTL标签库已引入 --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
 	<title>学生详细信息 - 图书馆管理系统</title>
-	<!-- Bootstrap 5 CSS -->
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-	<!-- Bootstrap Icons -->
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-	<!-- 原有CSS -->
 	<link rel="stylesheet" href="../css/list.css">
 
 	<style>
@@ -90,19 +89,29 @@
 			top: 20px;
 			left: 20px;
 		}
+		/* (新功能) 锁定模块的样式 */
+		.lock-section {
+			background-color: #fff3cd; /* Bootstrap 警告黄色背景 */
+			border: 1px solid #ffeeba;
+			border-radius: 8px;
+			padding: 20px;
+			margin: 20px auto;
+			max-width: 800px;
+		}
 	</style>
 </head>
 <body>
-<!-- 返回按钮 -->
-<a href="javascript:history.back()" class="btn btn-outline-primary back-btn">
-	<i class="bi bi-arrow-left"></i> 返回
+<a href="${pageContext.request.contextPath}/PageServlet.do?method=showStudent" class="btn btn-outline-primary back-btn">
+	<i class="bi bi-arrow-left"></i> 返回列表
 </a>
+
 
 <div class="container">
 	<div class="page-header">
 		<h2><i class="bi bi-person-lines-fill"></i> 学生账户信息</h2>
 	</div>
 
+	<%-- (您在上一步中修复的 <c:choose> 逻辑) --%>
 	<c:choose>
 		<c:when test="${not empty student}">
 			<div class="info-card">
@@ -161,14 +170,38 @@
 					<div class="info-label">借书数量</div>
 					<div class="info-value">
                             <span class="book-count borrowed-count">
-                                ${student.amount} 本
+                          ${student.amount} 本
                             </span>
 					</div>
 				</div>
 			</div>
 
-			<!-- 添加一些统计信息 -->
-			<div class="row mt-4">
+			<%-- 【修改点 4】: (新功能) 账号锁定模块 --%>
+			<div class="lock-section">
+				<h5><i class="bi bi-lock-fill"></i> 账号管理 (管理员操作)</h5>
+				<hr>
+				<div class="form-check form-switch fs-5">
+					<input class="form-check-input" type="checkbox"
+						   id="lockCheckbox"
+						${student.locked ? 'checked' : ''}
+						   onclick="updateLockStatus(${student.id})">
+
+					<label class="form-check-label" for="lockCheckbox" id="lockLabel">
+						<c:if test="${student.locked}">
+							<strong class="text-danger">账号已锁定 (禁止借书)</strong>
+						</c:if>
+						<c:if test="${!student.locked}">
+							<span class="text-success">账号正常 (允许借书)</span>
+						</c:if>
+					</label>
+				</div>
+				<small class="form-text text-muted">
+					勾选此框将立即锁定该学生账号，使其无法借阅新书，但仍可还书。
+				</small>
+			</div>
+
+
+			<div class="row mt-4" style="max-width: 800px; margin: 0 auto;">
 				<div class="col-md-4">
 					<div class="card text-center">
 						<div class="card-body">
@@ -198,20 +231,77 @@
 				</div>
 			</div>
 		</c:when>
+
+		<%-- (您删除的 <c:otherwise> 逻辑，为保险起见我加回来) --%>
 		<c:otherwise>
-			<div class="empty-state">
-				<i class="bi bi-exclamation-circle"></i>
-				<h4>无法获取学生信息</h4>
-				<p>没有找到对应的学生数据。</p>
-				<a href="javascript:history.back()" class="btn btn-primary mt-2">
-					<i class="bi bi-arrow-left"></i> 返回
-				</a>
+			<div class="empty-state info-card">
+				<i class="bi bi-search-heart"></i>
+				<h4>未找到学生</h4>
+				<p>您所查询的学生信息不存在。</p>
 			</div>
 		</c:otherwise>
+
 	</c:choose>
 </div>
 
-<!-- Bootstrap JS Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<%-- 【修改点 5】: (新功能) 添加 JavaScript (AJAX) --%>
+<script>
+	function updateLockStatus(studentId) {
+		const checkbox = document.getElementById('lockCheckbox');
+		const label = document.getElementById('lockLabel');
+		const isLocked = checkbox.checked;
+
+		// (1) 准备要发送的数据
+		const formData = new URLSearchParams();
+		formData.append('s_id', studentId);
+		formData.append('isLocked', isLocked);
+
+		// (2) 立即更新UI (乐观更新)
+		if (isLocked) {
+			label.innerHTML = '<strong class=\"text-danger\"><i>正在锁定...</i></strong>';
+		} else {
+			label.innerHTML = '<span class=\"text-success\"><i>正在解锁...</i></span>';
+		}
+
+		// (3) 发送 AJAX 请求到新 Servlet
+		fetch('${pageContext.request.contextPath}/studentLockServlet.do', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+			},
+			body: formData
+		})
+				.then(response => {
+					if (!response.ok) {
+						throw new Error('服务器响应失败');
+					}
+					return response.json();
+				})
+				.then(data => {
+					if (data.success) {
+						// (4) 根据服务器返回的最终状态更新UI
+						if (data.newState) {
+							label.innerHTML = '<strong class=\"text-danger\">账号已锁定 (禁止借书)</strong>';
+							checkbox.checked = true;
+						} else {
+							label.innerHTML = '<span class=\"text-success\">账号正常 (允许借书)</span>';
+							checkbox.checked = false;
+						}
+					} else {
+						throw new Error(data.message || '更新失败');
+					}
+				})
+				.catch(error => {
+					// (5) 如果失败，回滚UI
+					console.error('Error:', error);
+					alert('更新失败！请刷新页面重试。');
+					// 回滚复选框状态
+					checkbox.checked = !isLocked;
+					label.innerHTML = isLocked ? '<span class=\"text-success\">账号正常 (允许借书)</span>' : '<strong class=\"text-danger\">账号已锁定 (禁止借书)</strong>';
+				});
+	}
+</script>
 </body>
 </html>

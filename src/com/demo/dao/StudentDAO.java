@@ -122,6 +122,7 @@ public class StudentDAO {
 		student.setClasses(rs.getString("classes"));
 		student.setEmail(rs.getString("email"));
 		student.setAmount(rs.getInt("amount"));
+		student.setLocked(rs.getBoolean("is_locked"));
 		return student;
 	}
 
@@ -267,5 +268,23 @@ public class StudentDAO {
 			db.closeConn();
 		}
 		return count;
+	}
+
+	/**
+	 * (新功能) 更新学生的锁定状态
+	 */
+	public boolean setAccountLockStatus(int s_id, boolean isLocked) throws Exception {
+		boolean flag = false;
+		db = new DBAccess();
+		String sql = "UPDATE students SET is_locked = ? WHERE id = ?";
+		if (db.createConn()) {
+			db.pre = db.getConn().prepareStatement(sql);
+			db.pre.setBoolean(1, isLocked);
+			db.pre.setInt(2, s_id);
+			if (db.pre.executeUpdate() > 0) flag = true;
+		}
+		if (db.pre != null) db.pre.close();
+		db.closeConn();
+		return flag;
 	}
 }

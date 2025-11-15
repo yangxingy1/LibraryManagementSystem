@@ -29,6 +29,12 @@ public class BorrowServlet extends HttpServlet {
 
 		// 从 Session 获取学生ID，这比从 request 获取更安全
 		Students student = (Students) session.getAttribute("student");
+		if (student.isLocked()) {
+			out.println("<script>alert('提交失败：您的账号已被锁定，禁止借书！如有疑问请联系管理员。');" +
+					"window.history.back();" +
+					"</script>");
+			return; // 立即停止执行
+		}
 		int s_id = student.getId();
 		int b_id = Integer.parseInt(request.getParameter("b_id"));
 

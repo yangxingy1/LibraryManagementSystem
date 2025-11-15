@@ -131,42 +131,52 @@
             </div>
             <ul class="nav flex-column">
                 <li class="nav-item">
-                    <a href="admin.jsp" class="nav-link active">
+                    <a href="${pageContext.request.contextPath}/admin.jsp" class="nav-link active">
                         <i class="bi bi-house-door"></i> 首页
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="adminManageServlet.do?action=myProfile" target="showBook" class="nav-link">
+                    <a href="${pageContext.request.contextPath}/adminManageServlet.do?action=myProfile" target="showBook" class="nav-link">
                         <i class="bi bi-person-badge"></i> 管理员账号管理
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="admin/add_student.jsp" target="showBook" class="nav-link">
-                        <i class="bi bi-person"></i> 添加学生
+
+                    <a href="${pageContext.request.contextPath}/admin/add_student.jsp" target="showBook" class="nav-link">
+                        <i class="bi bi-person-plus"></i> 添加学生
+
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="PageServlet.do?method=showStudent" target="showBook" class="nav-link">
+                    <a href="${pageContext.request.contextPath}/PageServlet.do?method=showStudent" target="showBook" class="nav-link">
                         <i class="bi bi-people"></i> 查看学生
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="PageServlet.do?method=delStudent" target="showBook" class="nav-link">
+                    <a href="${pageContext.request.contextPath}/PageServlet.do?method=delStudent" target="showBook" class="nav-link">
                         <i class="bi bi-person-dash"></i> 删除学生
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="admin/reg_book.jsp" target="showBook" class="nav-link">
-                        <i class="bi bi-book"></i> 添加书籍
+
+
+                    <a href="${pageContext.request.contextPath}/admin/reg_book.jsp" target="showBook" class="nav-link">
+                        <i class="bi bi-book-plus"></i> 添加书籍
+
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="PageServlet.do?method=showBook" target="showBook" class="nav-link">
+                    <a href="${pageContext.request.contextPath}/PageServlet.do?method=showBook" target="showBook" class="nav-link">
                         <i class="bi bi-book"></i> 查看书籍
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="${pageContext.request.contextPath}/borrowAdminServlet.do?action=listPending" target="showBook" class="nav-link">
+                        <i class="bi bi-check-square-fill"></i> 借阅审批
+                    </a>
+                </li>
                 <li class="nav-item mt-4">
-                    <a href="login.jsp" class="nav-link">
+                    <a href="${pageContext.request.contextPath}/login.jsp" class="nav-link">
                         <i class="bi bi-box-arrow-right"></i> 切换账号/退出
                     </a>
                 </li>

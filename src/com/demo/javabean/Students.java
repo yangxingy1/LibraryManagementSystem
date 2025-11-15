@@ -10,6 +10,7 @@ public class Students {
     private String classes;
     private String email;
     private int amount;
+    private boolean isLocked;
 
     public int getId() {
         return id;
@@ -74,4 +75,9 @@ public class Students {
     public void setAmount(int amount) {
         this.amount = amount;
     }
+
+    public boolean isLocked() {return isLocked;}
+
+    public void setLocked(boolean locked) {isLocked = locked;}
+
 }

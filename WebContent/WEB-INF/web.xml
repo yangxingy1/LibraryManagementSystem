@@ -84,6 +84,14 @@
 		<servlet-name>myBorrowsServlet</servlet-name>
 		<url-pattern>/myBorrowsServlet.do</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>adminManageServlet</servlet-name>
+		<servlet-class>com.demo.servlet.AdminManageServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>adminManageServlet</servlet-name>
+		<url-pattern>/adminManageServlet.do</url-pattern>
+	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>
@@ -120,6 +128,11 @@
 	<filter-mapping>
 		<filter-name>filter1</filter-name>
 		<url-pattern>/borrowAdminServlet.do</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>filter1</filter-name>
+		<url-pattern>/adminManageServlet.do</url-pattern>
 	</filter-mapping>
 
 	<filter>

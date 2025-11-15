@@ -130,15 +130,11 @@ CREATE TABLE `borrows` (
 
 /*Data for the table `borrows` */
 
-insert  into `borrows`(`s_id`,`b_id`,`amount`) values 
-
-(7,5,1),
-
-(7,10,1),
-
-(10,1,1),
-
-(8,1,2);
+INSERT INTO `borrows` (`s_id`, `b_id`, `status`, `request_date`, `approval_date`) VALUES
+      (8, 5, 'approved', '2025-11-10 09:00:00', '2025-11-10 10:00:00'),
+      (8, 10, 'approved', '2025-11-11 09:00:00', '2025-11-11 10:00:00'),
+      (10, 1, 'approved', '2025-11-12 09:00:00', '2025-11-12 10:00:00'),
+      (11, 3, 'pending', '2025-11-14 10:00:00', NULL);
 
 /*Table structure for table `students` */
 

@@ -16,30 +16,24 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/`online_library` /*!40100 DEFAULT CHARAC
 
 USE `online_library`;
 
-/*Table structure for table `admins` */
-DROP TABLE IF EXISTS `admins`;
+-- =============== 第一步：先创建所有主表（无外键依赖）===============
+-- students 表（被 borrows 引用）
+DROP TABLE IF EXISTS `students`;
+CREATE TABLE `students` (
+                            `id` int(20) NOT NULL AUTO_INCREMENT,
+                            `user` varchar(50) DEFAULT '',
+                            `password` varchar(50) DEFAULT NULL,
+                            `is_locked` TINYINT DEFAULT 0,
+                            `name` varchar(50) DEFAULT NULL,
+                            `grade` varchar(50) DEFAULT NULL,
+                            `classes` varchar(50) DEFAULT NULL,
+                            `email` varchar(50) DEFAULT NULL,
+                            `amount` int(50) DEFAULT NULL,
+                            PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
 
--- ✅ 修改1: 在 CREATE TABLE 中直接包含 is_locked 字段，并设置 id 为 AUTO_INCREMENT
-CREATE TABLE `admins` (
-                          `id` int(20) NOT NULL AUTO_INCREMENT,  -- ✅ 设置自增
-                          `admin` varchar(50) DEFAULT NULL,
-                          `password` varchar(50) DEFAULT NULL,
-                          `realname` varchar(50) DEFAULT NULL,
-                          `phone` varchar(50) DEFAULT NULL,
-                          `email` varchar(50) DEFAULT NULL,
-                          `address` varchar(50) DEFAULT NULL,
-                          `is_locked` TINYINT DEFAULT 0,        -- ✅ 直接包含 is_locked 字段
-                          PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/*Data for the table `admins` */
--- ✅ 修改2: 插入数据时不再指定 id（因为是自增）
-INSERT INTO `admins` (`admin`, `password`, `realname`, `phone`, `email`, `address`, `is_locked`) VALUES
-    ('admin', 'admin', '管理员', '1582476', '297@qq.com', '北京市', 0);
-
-/*Table structure for table `books` */
+-- books 表（被 borrows 引用）
 DROP TABLE IF EXISTS `books`;
-
 CREATE TABLE `books` (
                          `id` int(20) NOT NULL AUTO_INCREMENT,
                          `name` varchar(50) DEFAULT NULL,
@@ -50,7 +44,30 @@ CREATE TABLE `books` (
                          PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
 
-/*Data for the table `books` */
+-- admins 表（独立）
+DROP TABLE IF EXISTS `admins`;
+CREATE TABLE `admins` (
+                          `id` int(20) NOT NULL AUTO_INCREMENT,
+                          `admin` varchar(50) DEFAULT NULL,
+                          `password` varchar(50) DEFAULT NULL,
+                          `realname` varchar(50) DEFAULT NULL,
+                          `phone` varchar(50) DEFAULT NULL,
+                          `email` varchar(50) DEFAULT NULL,
+                          `address` varchar(50) DEFAULT NULL,
+                          `is_locked` TINYINT DEFAULT 0,
+                          PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- =============== 第二步：插入主表数据 ===============
+-- students 数据
+INSERT INTO `students`(`id`,`user`,`password`,`is_locked`,`name`,`grade`,`classes`,`email`,`amount`) VALUES
+                                                                                                         (8,'20200002','123',0,'李四','2020','网工一班','456@qq.com',2),
+                                                                                                         (10,'20200005','123',0,'张三','2020','数媒二班','456@qq.com',1),
+                                                                                                         (11,'20240001','123456',0,'王五','2024','软件工程1班','1231321@qq.com',0),
+                                                                                                         (12,'20240002','123456',0,'李丽丽','2024','软件测试1班','12313@qq.com',0),
+                                                                                                         (13,'2024003','123456',0,'丘陵','2024','附件阿斯蒂芬','213131',0);
+
+-- books 数据
 INSERT INTO `books`(`id`,`name`,`author`,`intro`,`amount`,`category`) VALUES
                                                                           (1,'Java程序设计','李作者','《Java程序设计》是一本编程指导教材',25,'技术类'),
                                                                           (2,'Web前端开发','王作者','《Web前端开发》是一本编程指导教材',42,'技术类'),
@@ -80,9 +97,12 @@ INSERT INTO `books`(`id`,`name`,`author`,`intro`,`amount`,`category`) VALUES
                                                                           (26,'战争与和平法','滑作者','《战争与和平法》是一本政治书籍',35,'政治类'),
                                                                           (27,'平凡的世界','路作者',NULL,96,'名著类');
 
-/*Table structure for table `borrows` */
-DROP TABLE IF EXISTS `borrows`;
+-- admins 数据
+INSERT INTO `admins` (`admin`, `password`, `realname`, `phone`, `email`, `address`, `is_locked`) VALUES
+    ('admin', 'admin', '管理员', '1582476', '297@qq.com', '北京市', 0);
 
+-- =============== 第三步：创建 borrows 表（依赖 students 和 books）===============
+DROP TABLE IF EXISTS `borrows`;
 CREATE TABLE `borrows` (
                            `id` INT(20) NOT NULL AUTO_INCREMENT,
                            `s_id` INT(20) DEFAULT NULL,
@@ -92,42 +112,17 @@ CREATE TABLE `borrows` (
                            `approval_date` DATETIME DEFAULT NULL,
                            `return_date` DATETIME DEFAULT NULL,
                            PRIMARY KEY (`id`),
-                           FOREIGN KEY (`s_id`) REFERENCES `students`(`id`),
-                           FOREIGN KEY (`b_id`) REFERENCES `books`(`id`)
+                           FOREIGN KEY (`s_id`) REFERENCES `students`(`id`) ON DELETE SET NULL,
+                           FOREIGN KEY (`b_id`) REFERENCES `books`(`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-/*Data for the table `borrows` */
+-- =============== 第四步：插入 borrows 数据 ===============
 INSERT INTO `borrows` (`s_id`, `b_id`, `status`, `request_date`, `approval_date`) VALUES
+
                                                                                       (8, 5, 'approved', '2025-11-10 09:00:00', '2025-11-10 10:00:00'),
                                                                                       (8, 10, 'approved', '2025-11-11 09:00:00', '2025-11-11 10:00:00'),
                                                                                       (10, 1, 'approved', '2025-11-12 09:00:00', '2025-11-12 10:00:00'),
                                                                                       (11, 3, 'pending', '2025-11-14 10:00:00', NULL);
-
-/*Table structure for table `students` */
-DROP TABLE IF EXISTS `students`;
-
--- ✅ 修改3: 在 CREATE TABLE 中直接包含 is_locked 字段
-CREATE TABLE `students` (
-                            `id` int(20) NOT NULL AUTO_INCREMENT,
-                            `user` varchar(50) DEFAULT '',
-                            `password` varchar(50) DEFAULT NULL,
-                            `is_locked` TINYINT DEFAULT 0,        -- ✅ 直接包含 is_locked 字段（放在 password 后）
-                            `name` varchar(50) DEFAULT NULL,
-                            `grade` varchar(50) DEFAULT NULL,
-                            `classes` varchar(50) DEFAULT NULL,
-                            `email` varchar(50) DEFAULT NULL,
-                            `amount` int(50) DEFAULT NULL,
-                            PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
-
-/*Data for the table `students` */
--- ✅ 修改4: 插入数据时包含 is_locked 字段（所有初始学生设为 0）
-INSERT INTO `students`(`id`,`user`,`password`,`is_locked`,`name`,`grade`,`classes`,`email`,`amount`) VALUES
-                                                                                                         (8,'20200002','123',0,'李四','2020','网工一班','456@qq.com',2),
-                                                                                                         (10,'20200005','123',0,'张三','2020','数媒二班','456@qq.com',1),
-                                                                                                         (11,'20240001','123456',0,'王五','2024','软件工程1班','1231321@qq.com',0),
-                                                                                                         (12,'20240002','123456',0,'李丽丽','2024','软件测试1班','12313@qq.com',0),
-                                                                                                         (13,'2024003','123456',0,'丘陵','2024','附件阿斯蒂芬','213131',0);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

@@ -92,6 +92,14 @@
 		<servlet-name>adminManageServlet</servlet-name>
 		<url-pattern>/adminManageServlet.do</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>studentLockServlet</servlet-name>
+		<servlet-class>com.demo.servlet.StudentLockServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>studentLockServlet</servlet-name>
+		<url-pattern>/studentLockServlet.do</url-pattern>
+	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>
@@ -133,6 +141,11 @@
 	<filter-mapping>
 		<filter-name>filter1</filter-name>
 		<url-pattern>/adminManageServlet.do</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>filter1</filter-name>
+		<url-pattern>/studentLockServlet.do</url-pattern>
 	</filter-mapping>
 
 	<filter>

@@ -1,5 +1,6 @@
 package com.demo.servlet;
 
+
 import com.demo.dao.StudentDAO;
 import com.demo.javabean.*;
 
@@ -13,36 +14,32 @@ import javax.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+@WebServlet("/manageStudent")
 
 public class ManageStudentServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//    	HttpSession session=request.getSession();
-//    	if(session!=null&&session.getAttribute("a_user1")!=null){
-//    	String action = (String)request.getParameter("action");
-//    	if(action==null) {
-//			PrintWriter out = response.getWriter();
-//			out.println("invalid request!");
-//		} else if(action.equals("addstudent")) {
-//			AddStudent(request, response);
-//		}
-//		else if(action.equals("delstudent")) {
-//			DelStudent(request, response);
-//		}
-//		else if(action.equals("showstudent")){
-//			ShowStudent(request,response);
-//		}
-//    	}
-//    	else {
-//			response.sendRedirect("login.jsp");
-//		}
         String action = (String) request.getParameter("action");
         if (action == null) {
             PrintWriter out = response.getWriter();
             out.println("invalid request!");
-        } else if (action.equals("addstudent")) {
+        }
+        // ✅ 新增：处理锁定操作
+        else if (action.equals("lock")) {
+            lockStudent(request, response);
+        }
+        // ✅ 新增：处理解锁操作
+        else if (action.equals("unlock")) {
+            unlockStudent(request, response);
+        }
+        // ✅ 新增：处理重置密码操作
+        else if (action.equals("resetPass")) {
+            resetPassword(request, response);
+        }
+        // 🔁 保留原有功能
+        else if (action.equals("addstudent")) {
             AddStudent(request, response);
         } else if (action.equals("delstudent")) {
             DelStudent(request, response);
@@ -51,6 +48,42 @@ public class ManageStudentServlet extends HttpServlet {
         }
     }
 
+    // ✅ 新增：锁定学生账号
+    private void lockStudent(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        StudentDAO dao = new StudentDAO();
+        boolean success = dao.updateLockStatus(id, 1); // 1 = 锁定
+
+        // 重定向回学生管理页（你原来的页面路径）
+        response.sendRedirect("PageServlet.do?method=showStudent");
+    }
+
+    // ✅ 新增：解锁学生账号
+    private void unlockStudent(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        StudentDAO dao = new StudentDAO();
+        boolean success = dao.updateLockStatus(id, 0); // 0 = 解锁
+
+        response.sendRedirect("PageServlet.do?method=showStudent");
+    }
+
+    // ✅ 新增：重置学生密码
+    private void resetPassword(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+        int id = Integer.parseInt(request.getParameter("id"));
+        String newPass = request.getParameter("newPass");
+        StudentDAO dao = new StudentDAO();
+
+        if (newPass != null && !newPass.trim().isEmpty()) {
+            boolean success = dao.resetPassword(id, newPass);
+        }
+
+        response.sendRedirect("PageServlet.do?method=showStudent");
+    }
+
+    // 🔁 保留原有 ShowStudent 方法（无需修改）
     private void ShowStudent(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String user = request.getParameter("user");
         StudentDAO studao = new StudentDAO();
@@ -58,13 +91,13 @@ public class ManageStudentServlet extends HttpServlet {
         try {
             student = studao.getStudentByName(user);
             request.setAttribute("student", student);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
         request.getRequestDispatcher("admin/show_student.jsp").forward(request, response);
     }
 
+    // 🔁 保留原有 DelStudent 方法（无需修改）
     private void DelStudent(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("utf-8");
         resp.setCharacterEncoding("utf-8");
@@ -91,6 +124,7 @@ public class ManageStudentServlet extends HttpServlet {
         }
     }
 
+    // 🔁 修改 AddStudent：显式设置 isLocked = 0
     private void AddStudent(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         PrintWriter out = resp.getWriter();
         String user = req.getParameter("user");
@@ -101,7 +135,9 @@ public class ManageStudentServlet extends HttpServlet {
         String classes = req.getParameter("classes");
         String email = req.getParameter("email");
         String admin = req.getParameter("admin");
-        if ("".equals(user) || "".equals(password) || "".equals(relpwd) || !password.equals(relpwd) || "".equals(name) || "".equals(grade) || "".equals(classes) || "".equals(email)) {
+
+        if ("".equals(user) || "".equals(password) || "".equals(relpwd) || !password.equals(relpwd)
+                || "".equals(name) || "".equals(grade) || "".equals(classes) || "".equals(email)) {
             out.println("<script>alert('添加失败，信息不全!');" +
                     "window.location.href = \"admin/add_student.jsp\";" +
                     "</script>");
@@ -121,9 +157,11 @@ public class ManageStudentServlet extends HttpServlet {
                 student.setName(name);
                 student.setGrade(grade);
                 student.setClasses(classes);
-                ;
                 student.setEmail(email);
                 student.setAmount(0);
+                // ✅ 新增：显式设置 isLocked = 0（确保新账号未锁定）
+                student.setIsLocked(0);
+
                 try {
                     if (a_dao.add(student)) {
                         student = a_dao.getStudentByName(student.getUser());
@@ -136,15 +174,12 @@ public class ManageStudentServlet extends HttpServlet {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             }
         }
     }
 
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //req.setCharacterEncoding("utf-8");
         doGet(req, resp);
     }
 }

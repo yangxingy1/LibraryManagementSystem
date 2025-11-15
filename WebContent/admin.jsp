@@ -7,11 +7,6 @@
     <link rel="stylesheet" href="css/head02.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/style.css">
-
-    <style>
-
-
-    </style>
 </head>
 <body>
 <div class="sidebar">
@@ -23,19 +18,20 @@
         <li><a href="admin/reg_book.jsp" target="showBook">添加书籍</a></li>
         <li><a href="PageServlet.do?method=showBook" target="showBook">查看书籍</a></li>
         <li><a href="borrowAdminServlet.do?action=listPending" target="showBook">借阅审批</a></li>
-        <!--<li><a href="admin/del_book.jsp" target="showBook">删除书籍</a></li> -->
+        <!-- ✅ 新增：管理管理员账号 -->
+        <li><a href="manageAdmin?action=list" target="showBook">管理管理员账号</a></li>
         <li><a href="login.jsp">切换账号/退出</a></li>
     </ul>
 </div>
-<% Calendar cal = Calendar.getInstance();
+<%
+    Calendar cal = Calendar.getInstance();
     SimpleDateFormat format = new SimpleDateFormat("yyyy年-MM月-dd日");
 %>
 <div class="box">
-    <div class="box-head" ><h1>图 书 馆 管 理 系 统</h1></div>
-    <!-- 用户注册的标题 -->
+    <div class="box-head"><h1>图 书 馆 管 理 系 统</h1></div>
     <p align="right">欢迎你，管理员 </p>
     <p align="right"><% out.println(format.format(cal.getTime()));%></p>
-    <iframe name="showBook" src="" frameborder="0" width="100%" height="80%">
+    <iframe name="showBook" src="" frameborder="0" width="100%" height="80%"></iframe>
 </div>
 </body>
 </html>

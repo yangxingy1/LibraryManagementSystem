@@ -14,7 +14,7 @@ public class DBAccess {
 
 	private String usr = "root";
 
-	private String pwd = "MySQL";
+	private String pwd = "Kami1004-";
 
 	private Connection conn = null;
 

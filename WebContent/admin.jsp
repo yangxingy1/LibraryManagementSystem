@@ -136,6 +136,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="adminManageServlet.do?action=myProfile" target="showBook" class="nav-link">
+                        <i class="bi bi-person-badge"></i> 管理员账号管理
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="admin/add_student.jsp" target="showBook" class="nav-link">
                         <i class="bi bi-person-plus"></i> 添加学生
                     </a>
@@ -187,6 +192,11 @@
             <div class="content-frame">
                 <iframe name="showBook" src="" frameborder="0"></iframe>
             </div>
+
+            <footer class="footer-bar">
+                <p>&copy; 2025 图书馆管理系统 (Online Library System). 保留所有权利.</p>
+            </footer>
+
         </div>
     </div>
 </div>

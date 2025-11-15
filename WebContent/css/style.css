@@ -44,3 +44,21 @@ body {
 }
 
 
+.footer-bar {
+    /* 样式与 header-bar 保持一致  */
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    padding: 15px 20px; /* 内边距 */
+
+    text-align: center;
+    color: #6c757d; /* 和欢迎信息的日期颜色一致 [cite: 62, 197] */
+    font-size: 0.9rem;
+
+    /* 关键：与 iframe 容器隔开 */
+    margin-top: 20px;
+}
+
+.footer-bar p {
+    margin: 0;
+}

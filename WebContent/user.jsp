@@ -20,9 +20,9 @@
     <ul>
         <!--  <li><a href="#">用户</a></li>-->
         <li><a href="userChoiceServlet.do?signal=1" target="showBook">全部图书</a></li>
-
         <li><a href="user/my_borrow.jsp" target="showBook">我的已借图书</a></li>
         <li><a href="user/my_message.jsp" target="showBook">我的基本信息</a></li>
+        <li><a href="myBorrowsServlet.do" target="showBook">我的借阅申请</a></li>
         <li><a href="login.jsp">切换账号/退出</a></li>
     </ul>
 </div>

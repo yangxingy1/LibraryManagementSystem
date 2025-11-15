@@ -22,6 +22,7 @@
         <li><a href="PageServlet.do?method=delStudent" target="showBook">删除学生</a></li>
         <li><a href="admin/reg_book.jsp" target="showBook">添加书籍</a></li>
         <li><a href="PageServlet.do?method=showBook" target="showBook">查看书籍</a></li>
+        <li><a href="borrowAdminServlet.do?action=listPending" target="showBook">借阅审批</a></li>
         <!--<li><a href="admin/del_book.jsp" target="showBook">删除书籍</a></li> -->
         <li><a href="login.jsp">切换账号/退出</a></li>
     </ul>

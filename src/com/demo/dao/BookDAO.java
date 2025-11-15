@@ -250,4 +250,57 @@ public class BookDAO  {
 		}
 		return count;
 	}
+	/**
+	 * 获取图书的当前状态 (功能2)
+	 * @param b_id
+	 * @return "待审批", "在库", "借出"
+	 */
+	public String getBookStatus(int b_id) {
+		String status = "借出"; // 默认为借出
+		db = new DBAccess();
+
+		// 这是一个优化的SQL查询，一次性获取总库存、待审批数、已借出数
+		String sql = "SELECT " +
+				"    b.amount AS total_stock, " +
+				"    (SELECT COUNT(*) FROM borrows br WHERE br.b_id = b.id AND br.status = 'pending') AS pending_count, " +
+				"    (SELECT COUNT(*) FROM borrows br WHERE br.b_id = b.id AND br.status = 'approved') AS approved_count " +
+				"FROM books b " +
+				"WHERE b.id = ?";
+
+		try {
+			if (db.createConn()) {
+				db.pre = db.getConn().prepareStatement(sql);
+				db.pre.setInt(1, b_id);
+				db.setRs(db.pre.executeQuery());
+
+				if (db.getRs().next()) {
+					int totalStock = db.getRs().getInt("total_stock");
+					int pendingCount = db.getRs().getInt("pending_count");
+					int approvedCount = db.getRs().getInt("approved_count");
+
+					int availableStock = totalStock - (pendingCount + approvedCount);
+
+					// 逻辑判断
+					if (pendingCount > 0) {
+						status = "待审批";
+					} else if (availableStock > 0) {
+						status = "在库";
+					} else {
+						status = "借出";
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			db.closeRs();
+			if(db.pre != null) {
+				try {
+					db.pre.close();
+				} catch (Exception e2) {}
+			}
+			db.closeConn();
+		}
+		return status;
+	}
 }

@@ -4,14 +4,14 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	id="WebApp_ID" version="2.5">
 	<display-name>demo</display-name>
-	<servlet>
-		<servlet-name>UserServlet</servlet-name>
-		<servlet-class>com.demo.servlet.UserServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>UserServlet</servlet-name>
-		<url-pattern>/UserServlet.do</url-pattern>
-	</servlet-mapping>
+<!--	<servlet>-->
+<!--		<servlet-name>UserServlet</servlet-name>-->
+<!--		<servlet-class>com.demo.servlet.UserServlet</servlet-class>-->
+<!--	</servlet>-->
+<!--	<servlet-mapping>-->
+<!--		<servlet-name>UserServlet</servlet-name>-->
+<!--		<url-pattern>/UserServlet.do</url-pattern>-->
+<!--	</servlet-mapping>-->
 	<servlet>
 	<servlet-name>adminLoginServlet</servlet-name>
 	<servlet-class>com.demo.servlet.AdminLoginServlet</servlet-class>
@@ -68,6 +68,22 @@
 	<servlet-name>PageServlet</servlet-name>
 	<url-pattern>/PageServlet.do</url-pattern>
 	</servlet-mapping>
+	<servlet>
+		<servlet-name>borrowAdminServlet</servlet-name>
+		<servlet-class>com.demo.servlet.BorrowAdminServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>borrowAdminServlet</servlet-name>
+		<url-pattern>/borrowAdminServlet.do</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>myBorrowsServlet</servlet-name>
+		<servlet-class>com.demo.servlet.MyBorrowsServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>myBorrowsServlet</servlet-name>
+		<url-pattern>/myBorrowsServlet.do</url-pattern>
+	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>
@@ -87,13 +103,28 @@
 	<filter-class>com.demo.filter.LoginFilter</filter-class>
 	</filter>
 	<filter-mapping>
-	<filter-name>filter1</filter-name>
-	<url-pattern>*.do</url-pattern>
+		<filter-name>filter1</filter-name>
+		<url-pattern>/manageStudentServlet.do</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>filter1</filter-name>
+		<url-pattern>/manageBookServlet.do</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>filter1</filter-name>
+		<url-pattern>/PageServlet.do</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>filter1</filter-name>
+		<url-pattern>/borrowAdminServlet.do</url-pattern>
 	</filter-mapping>
 	  <jsp-config>  
         <taglib>  
            <taglib-uri>http://java.sun.com/jstl/core</taglib-uri>  
-            <taglib-location>/WEB-INF/c.tld</taglib-location>  
+            <taglib-location>/WEB-INF/lib/c.tld</taglib-location>
           </taglib>  
   </jsp-config>  
 </web-app>

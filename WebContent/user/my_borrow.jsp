@@ -130,7 +130,7 @@
                             // 为每条借阅记录查询一次书籍详情
                             Borrows currentBorrow = (Borrows) pageContext.getAttribute("borrow");
                             BookDAO bookDAOInstance = new BookDAO();
-                            pageContext.setAttribute("book", bookDAOInstance.getBookById(currentBorrow.getBId()));
+                            pageContext.setAttribute("book", bookDAOInstance.getBookById(currentBorrow.getB_id()));
                         %>
                         <tr>
                             <td>

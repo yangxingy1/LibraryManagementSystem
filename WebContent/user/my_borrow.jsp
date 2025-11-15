@@ -145,7 +145,7 @@
                             </td>
                             <td>
                                     <%-- 【修改点 3】: 链接到 ReturnServlet 并传递 borrow_id --%>
-                                <a href="../returnServlet?borrow_id=${borrow.id}"
+                                <a href="${pageContext.request.contextPath}/returnServlet?borrow_id=${borrow.id}"
                                    class="btn btn-outline-danger btn-sm return-btn"
                                    onclick="return confirmReturn('${book.name}')">
                                     <i class="bi bi-arrow-return-left"></i> 还书
@@ -161,7 +161,7 @@
                                 <i class="bi bi-inbox"></i>
                                 <h4>暂无已借书籍</h4>
                                 <p>您当前没有已借阅的书籍。</p>
-                                <a href="userChoiceServlet.do?signal=1" class="btn btn-primary mt-2">
+                                <a href="${pageContext.request.contextPath}/userChoiceServlet.do?signal=1" class="btn btn-primary mt-2">
                                     <i class="bi bi-book"></i> 浏览图书
                                 </a>
                             </div>

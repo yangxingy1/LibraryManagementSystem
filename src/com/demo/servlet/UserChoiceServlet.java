@@ -17,6 +17,7 @@ public class UserChoiceServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("Find UserChoiceServlet doGet");
         HttpSession session1 = request.getSession(false); // false表示不创建新session
         if (session1 == null || session1.getAttribute("s_user") == null) {
             // 如果未登录 (session不存在 或 s_user不存在)
@@ -36,6 +37,7 @@ public class UserChoiceServlet extends HttpServlet {
         }
         BookDAO b_dao = new BookDAO();
         ArrayList<Books> books;
+        System.out.println("111");
         try {
             switch (signal) {
                 case "1":
@@ -68,6 +70,7 @@ public class UserChoiceServlet extends HttpServlet {
                 if (i == currpage) {
                     sb.append('[' + "" + i + "" + ']');
                 } else {
+                    System.out.println("222");
                     sb.append("<a href='userChoiceServlet.do?signal=" + signal + "&page=" + i + "'>" + i + "</a>");
 
                 }

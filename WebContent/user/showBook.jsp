@@ -3,7 +3,6 @@
 <%@ page import="com.demo.dao.BookDAO" %>
 <%@ page import="com.demo.javabean.Books" %>
 <%@ page import="java.util.ArrayList" %>
-<%-- 【重要】引入JSTL --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
@@ -28,12 +27,7 @@
     </style>
 </head>
 <body>
-<%--
-    注意：我们不再使用旧的JSP脚本 (<% ... %>)
-    我们将完全依赖 JSTL 和 EL ($ { ... })
---%>
 
-<%-- (功能2) 我们需要 BookDAO 来获取状态 --%>
 <jsp:useBean id="bookDAO" class="com.demo.dao.BookDAO" scope="page" />
 
 <%-- (功能2) 从 session 获取学生对象，用于传递 s_id --%>

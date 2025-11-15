@@ -161,7 +161,7 @@
 
 
                     <a href="${pageContext.request.contextPath}/admin/reg_book.jsp" target="showBook" class="nav-link">
-                        <i class="bi bi-book-plus"></i> 添加书籍
+                        <i class="bi bi-book"></i> 添加书籍
 
                     </a>
                 </li>

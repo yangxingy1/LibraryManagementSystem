@@ -38,28 +38,28 @@ public class UserLoginServlet extends HttpServlet {
 	protected void Login(HttpServletRequest request,
 		HttpServletResponse response) throws Exception {
     	PrintWriter out = response.getWriter();
-		String a_user = request.getParameter("user");
+		String s_user = request.getParameter("user");
 		String a_password = request.getParameter("password");
 
 		String rem=request.getParameter("remember");
 		HttpSession session = request.getSession();
 		StudentDAO a_dao=new StudentDAO();
-		if ("".equals(a_user) ||"".equals(a_password)) {
+		if ("".equals(s_user) ||"".equals(a_password)) {
 			out.println("<script>" +
 					"alert('登录失败，账号或密码不能为空!!!');" +
 					"window.location.href = \"login.jsp\";" +
 					"</script>");
 			return;
 		}
-		else if(a_dao.isExist(a_user)){
-			Students student=a_dao.getStudentByName(a_user);
+		else if(a_dao.isExist(s_user)){
+			Students student=a_dao.getStudentByName(s_user);
 			session.setAttribute("student", student);
-			if(a_dao.valid(a_user, a_password)){
-				session.setAttribute("a_user", a_user);
+			if(a_dao.valid(s_user, a_password)){
+				session.setAttribute("s_user", s_user);
 				session.setAttribute("a_name", student.getName());
 				if("1".equals(rem)){
 					//创建2个Cookie
-					Cookie namecookie=new Cookie("username", a_user);
+					Cookie namecookie=new Cookie("username", s_user);
 					//设置Cookie的有效期为三天
 					namecookie.setMaxAge(60*60*24*3);
 					Cookie pwdcookie=new Cookie("password", a_password);
@@ -90,7 +90,7 @@ public class UserLoginServlet extends HttpServlet {
 	protected void Logout(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
-		session.removeAttribute("a_user");
+		session.removeAttribute("s_user");
 		response.sendRedirect("login.jsp");
 	}
 	//用户注册

@@ -187,6 +187,11 @@
             <div class="content-frame">
                 <iframe name="showBook" src="" frameborder="0"></iframe>
             </div>
+
+            <footer class="footer-bar">
+                <p>&copy; 2025 图书馆管理系统 (Online Library System). 保留所有权利.</p>
+            </footer>
+
         </div>
     </div>
 </div>

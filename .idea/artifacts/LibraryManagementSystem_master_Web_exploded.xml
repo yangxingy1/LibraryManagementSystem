@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="LibraryManagementSystem-master:Web exploded">
+    <output-path>$PROJECT_DIR$/artifacts/LibraryManagementSystem_master_Web_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="LibraryManagementSystem-master/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="javaee-facet-classes" facet="LibraryManagementSystem-master/web/Web" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

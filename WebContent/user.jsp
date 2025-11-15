@@ -11,7 +11,7 @@
 </head>
 <body>
 <%
-    Object obj = session.getAttribute("a_user");
+    Object obj = session.getAttribute("s_user");
     if (obj == null) {
         response.sendRedirect(request.getContextPath() + "/login.jsp");
     }
@@ -33,7 +33,7 @@
 <div class="box">
 
     <div class="box-head">图 书 馆 管 理 系 统</div>
-    <p align="right">欢迎你，${a_name}</p>
+    <p align="right">欢迎你，${s_name}</p>
     <!-- EL表达式 -->
     <p align="right">
         <% out.println(format.format(cal.getTime()));%>

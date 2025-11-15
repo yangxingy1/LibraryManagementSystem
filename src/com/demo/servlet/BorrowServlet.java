@@ -18,6 +18,14 @@ import com.demo.javabean.Students;
 
 public class BorrowServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session1 = request.getSession(false); // false表示不创建新session
+		if (session1 == null || session1.getAttribute("s_user") == null) {
+			// 如果未登录 (session不存在 或 s_user不存在)
+			response.getWriter().println("<script>alert('您尚未登录，请先登录！');" +
+					"window.location.href='" + request.getContextPath() + "/login.jsp';" +
+					"</script>");
+			return; // 必须 return，停止后续代码执行
+		}
 		PrintWriter out = response.getWriter();
 			int s_id = Integer.parseInt(request.getParameter("s_id"));
 			int b_id = Integer.parseInt(request.getParameter("b_id"));

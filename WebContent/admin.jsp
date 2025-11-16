@@ -1,6 +1,7 @@
 <%@page import="java.text.SimpleDateFormat" %>
 <%@page import="java.util.Calendar" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="mytags" uri="/WEB-INF/tlds/myLibraryTags.tld" %>
 <html>
 <head>
     <title>图书馆管理系统 - 管理员</title>
@@ -196,6 +197,9 @@
                 <div class="user-info">
                     <span class="welcome-text">欢迎你，管理员</span>
                     <span class="date-text"><%= currentDate %></span>
+                    <span class="date-text">
+                        全站已借出: <mytags:totalBorrowed /> 本 | <%= currentDate %>
+                    </span>
                 </div>
             </div>
 

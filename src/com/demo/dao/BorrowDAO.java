@@ -229,4 +229,46 @@ public class BorrowDAO {
         db.closeConn();
         return borrowsList;
     }
+    /**
+     * (新功能 - SimpleTag 1) 获取系统中所有 "已批准" (已借出) 的书籍总数
+     */
+    public int getTotalApprovedCount() throws Exception {
+        int count = 0;
+        db = new DBAccess();
+        String sql = "SELECT COUNT(*) FROM borrows WHERE status = 'approved'";
+        if (db.createConn()) {
+            db.pre = db.getConn().prepareStatement(sql);
+            db.setRs(db.pre.executeQuery());
+            if (db.getRs().next()) {
+                count = db.getRs().getInt(1);
+            }
+        }
+        db.closeRs();
+        if (db.pre != null) db.pre.close();
+        db.closeConn();
+        return count;
+    }
+
+    /**
+     * (新功能 - SimpleTag 2) 获取一个学生最近一次的还书日期
+     */
+    public java.util.Date getMostRecentReturnDate(int s_id) throws Exception {
+        java.util.Date returnDate = null;
+        db = new DBAccess();
+        // (我们从 'borrows' 表中 查找该学生 'returned' 状态的 'return_date' 的最大值)
+        String sql = "SELECT MAX(return_date) FROM borrows WHERE s_id = ? AND status = 'returned'";
+        if (db.createConn()) {
+            db.pre = db.getConn().prepareStatement(sql);
+            db.pre.setInt(1, s_id);
+            db.setRs(db.pre.executeQuery());
+            if (db.getRs().next()) {
+                // getTimestamp 可以返回 null，getDate 不一定
+                returnDate = db.getRs().getTimestamp(1);
+            }
+        }
+        db.closeRs();
+        if (db.pre != null) db.pre.close();
+        db.closeConn();
+        return returnDate;
+    }
 }

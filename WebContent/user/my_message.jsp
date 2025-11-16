@@ -1,6 +1,7 @@
 <%@ page import="com.demo.javabean.Students"%>
 <%@ page import="com.demo.dao.StudentDAO"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
+<%@ taglib prefix="mytags" uri="/WEB-INF/tlds/myLibraryTags.tld" %>
 <html>
 <head>
 	<title>我的基本信息 - 图书馆管理系统</title>
@@ -166,6 +167,17 @@
                             </span>
 					</div>
 				</div>
+
+				<div class="info-item">
+					<div class="info-icon">
+						<i class="bi bi-calendar-check" style="color: #28a745;"></i>
+					</div>
+					<div class="info-label">最近还书日期</div>
+					<div class="info-value">
+						<mytags:recentReturn userId="${student.id}" />
+					</div>
+				</div>
+
 			</div>
 
 			<!-- 添加一些使用提示 -->

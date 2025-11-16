@@ -6,7 +6,7 @@
 
     <tlib-version>1.0</tlib-version>
     <short-name>mytags</short-name>
-    <uri>http://demo.com/myLibraryTags</uri> 
+    <uri>http://demo.com/myLibraryTags</uri>
 
     <tag>
     <name>totalBorrowed</name>
